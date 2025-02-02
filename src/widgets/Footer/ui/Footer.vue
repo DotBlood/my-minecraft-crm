@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer flex justify-between p-10 bg-base-200 text-base-content w-full">
+  <footer class="footer flex justify-between p-10 bg-base-100 text-base-content w-full">
     <!-- Лого и описание -->
     <div>
       <div class="flex items-center gap-2">

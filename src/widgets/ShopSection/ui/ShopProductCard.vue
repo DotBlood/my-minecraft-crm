@@ -1,41 +1,44 @@
 <template>
-  <div
-    class="card bg-base-100 h-full transform transition-all hover:shadow-2xl border border-base-100/10 hover:border-base-100/20"
-  >
-    <div class="flex flex-col h-full p-6">
-      <!-- Изображение -->
-      <NuxtImg
-        :src="product.image"
-        :alt="product.name"
-        class="w-full h-48 object-cover rounded-lg mb-4"
-      />
-
-      <!-- Название и описание -->
-      <h3 class="text-2xl font-bold text-dark mb-2">
-        {{ product.name }}
-      </h3>
-      <p class="text-dark/70 flex-grow mb-4">
-        {{ product.description }}
-      </p>
-
-      <!-- Цена и кнопка -->
-      <div class="flex items-center justify-between">
-        <span class="text-xl font-bold text-dark"> {{ product.price }} ₽ </span>
-        <button
-          class="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white"
-        >
-          Купить
-        </button>
+  <div v-if="product" class="bg-base-100 rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow">
+    <NuxtImg 
+      v-if="product.image"
+      :src="product.image" 
+      class="w-full h-48 object-cover"
+      alt="Изображение товара"
+    />
+    <div class="p-4">
+      <h3 class="text-lg font-bold">{{ product.name || "Без названия" }}</h3>
+      <p class="text-sm text-base-content/70 mt-1">{{ product.description || "Нет описания" }}</p>
+      <div class="flex items-center justify-between mt-4">
+        <span class="text-xl font-semibold text-primary">{{ formattedPrice }}</span>
+        <button @click="addToCart" class="btn btn-primary">Купить</button>
       </div>
     </div>
   </div>
+  <div v-else class="text-center text-base-content/50">Ошибка загрузки товара</div>
 </template>
 
 <script setup>
-defineProps({
+import { defineProps, computed } from 'vue';
+
+const props = defineProps({
   product: {
     type: Object,
     required: true,
+    default: () => ({
+      name: "Без названия",
+      description: "Нет описания",
+      price: 0,
+      image: "",
+    }),
   },
 });
+
+const formattedPrice = computed(() => {
+  return new Intl.NumberFormat("ru-RU", { style: "currency", currency: "RUB" }).format(props.product.price || 0);
+});
+
+const addToCart = () => {
+  console.log(`Товар "${props.product.name}" добавлен в корзину!`);
+};
 </script>

@@ -20,7 +20,7 @@
           IP:
         </span>
         <span class="text-xl">mc.example.com</span>
-        <Button @click="copyIP" title="Скопировать IP"> 📋 </Button>
+        <button class="btn btn-ghost" @click="copyIP" title="Скопировать IP"> 📋 </button>
       </div>
 
       <!-- Онлайн -->
@@ -32,8 +32,6 @@
 </template>
 
 <script setup>
-import { Card } from "@entities/card";
-import { Button } from "@entities/button";
 import { useCopyIP } from "@features/CopyIP";
 import { useServerOnline } from "@features/ServerOnline";
 

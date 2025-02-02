@@ -1,5 +1,7 @@
 <template>
-  <div class="card bg-base-100   h-full hover:shadow-2xl border border-base-100/10 hover:border-base-100/20">
+  <div
+    class="card bg-base-100 h-full hover:shadow-2xl border border-base-100/10 hover:border-base-100/20"
+  >
     <div class="flex flex-col h-full p-6">
       <!-- Аватар и имя -->
       <div class="flex items-center mb-4">
@@ -25,16 +27,12 @@
       </p>
 
       <!-- Дата (опционально) -->
-      <p class="text-sm text-dark/50">
-        2 недели назад
-      </p>
+      <p class="text-sm text-dark/50">2 недели назад</p>
     </div>
   </div>
 </template>
 
 <script setup>
-import { Card } from '@entities/card';
-
 defineProps({
   name: {
     type: String,

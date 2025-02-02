@@ -23,14 +23,13 @@
         </p>
 
         <!-- Кнопка -->
-        <Button class="btn w-fit btn-ghost"> Подробнее </Button>
+        <button class="btn w-fit btn-ghost"> Подробнее </button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { Button } from "@entities/button";
 
 defineProps({
   title: {

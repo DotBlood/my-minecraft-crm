@@ -1,48 +1,34 @@
 <template>
-  <section class="py-16 bg-base-300 h-screen">
-    <div class="container mx-auto px-4">
-      <h2 class="text-4xl md:text-5xl font-bold text-dark text-center mb-12">
-        Магазин
-      </h2>
-
-      <!-- Категории -->
-      <div class="flex justify-center gap-4 mb-8">
-        <button
-          v-for="category in categories"
-          :key="category"
-          @click="selectedCategory = category"
-          :class="[
-            'btn',
-            selectedCategory === category ? 'btn-primary' : 'btn-ghost',
-          ]"
-        >
-          {{ category }}
-        </button>
-      </div>
-
-      <!-- Товары -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <ShopProductCard
-          v-for="product in filteredProducts"
-          :key="product.id"
-          :product="product"
-        />
-      </div>
+  <div class="container mx-auto px-4 py-8">
+    <h2 class="text-3xl font-bold mb-6 text-center">{{ title }}</h2>
+    <div
+      v-if="products.length"
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+    >
+      <ShopProductCard
+        v-for="product in products"
+        :key="product.id"
+        :product="product"
+      />
     </div>
-  </section>
+    <p v-else class="text-center text-lg text-base-content/50">
+      Нет доступных товаров
+    </p>
+  </div>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
 import { ShopProductCard } from "@widgets/ShopSection";
-import { shopProducts } from "../config/index";
 
-const categories = ["Привилегии", "Валюта", "Кейсы", "Другое"];
-const selectedCategory = ref("Привилегии");
-
-const filteredProducts = computed(() => {
-  return shopProducts.filter(
-    (product) => product.category === selectedCategory.value
-  );
+defineProps({
+  title: {
+    type: String,
+    default: "Наши товары",
+  },
+  products: {
+    type: Array,
+    required: true,
+    default: () => [],
+  },
 });
 </script>
