@@ -12,22 +12,26 @@
     </p>
 
     <!-- Блок с IP и онлайн -->
-    <Card>
+    <div class="card backdrop-blur-md bg-white/10 w-fit px-10 py-4">
       <!-- IP-адрес -->
       <div class="flex">
         <span class="text-xl relative flex justify-center items-center">
-          <div class="status status-success mr-5 animate-ping"></div>
+          <div class="relative status status-success mr-2">
+            <div class="absolute status status-success animate-ping"></div>
+          </div>
           IP:
         </span>
-        <span class="text-xl">mc.example.com</span>
-        <button class="btn btn-ghost" @click="copyIP" title="Скопировать IP"> 📋 </button>
+        <span class="text-xl flex items-center mr-5">mc.example.com</span>
+        <button class="btn btn-ghost" @click="copyIP" title="Скопировать IP">
+          📋
+        </button>
       </div>
 
       <!-- Онлайн -->
       <div class="text-lg">
         Онлайн: <span class="font-bold">{{ online }}</span> игроков
       </div>
-    </Card>
+    </div>
   </div>
 </template>
 

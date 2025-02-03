@@ -12,7 +12,9 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
 
   modules: ['@pinia/nuxt', "@nuxt/image", '@nuxt/icon', '@nuxt/fonts'],
-
+  pinia: {
+    storesDirs: ['./stores/**'],
+  },
 
   vite: {
     resolve: {

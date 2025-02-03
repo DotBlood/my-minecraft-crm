@@ -4,9 +4,15 @@
       class="size-60 absolute top-35"
       src="https://psv4.userapi.com/s/v1/d/JRIXAH1jYAEmTawlFn1Wp-MgS_gokJSWk_mMkgKFYkh6eK0ZFTgegV-qcwfI7XMAhOzY88Zl3bkHFI0vVIcw0W5JI3WuJuvKdfsIA0pcBuo1Y_sAyY950Q/drakon.png"
     />
-
     <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
       <h2 class="text-2xl font-bold text-center mb-6">Вход</h2>
+
+      <div
+        v-if="alert.message"
+        :class="`alert alert-${alert.type} p-3 rounded-lg text-center mb-4`"
+      >
+        <span>{{ alert.message }}</span>
+      </div>
 
       <form @submit.prevent="handleSubmit" class="space-y-4">
         <input
@@ -43,9 +49,37 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { ref } from "vue";
+import { useAuthStore } from "~/stores/auth";
 import useAuth from "../model/useAuth";
 
 const { form, handleLogin } = useAuth();
-const handleSubmit = () => handleLogin();
+const authStore = useAuthStore();
+const alert = ref({ message: "", type: "" });
+
+const handleSubmit = async () => {
+  try {
+    const response = await handleLogin();
+    console.log("Ответ сервера в handleSubmit:", response);
+
+    if (response.token) {
+      authStore.setToken(response.token);
+      await authStore.fetchUser();
+      alert.value = { message: response.text, type: response.type };
+    } else {
+      alert.value = { message: response.text, type: response.type };
+    }
+
+    setTimeout(() => {
+      alert.value = { message: "", type: "" };
+    }, 5000);
+  } catch (error) {
+    console.error("Ошибка при обработке входа:", error);
+    alert.value = {
+      message: "Ошибка при входе. Попробуйте снова.",
+      type: "error",
+    };
+  }
+};
 </script>

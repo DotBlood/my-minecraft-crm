@@ -22,37 +22,81 @@
             </NuxtLink>
           </li>
           <li>
-            <NuxtLink class="btn btn-ghost font-medium text-[16px]">
+            <NuxtLink to="/bank" class="btn btn-ghost font-medium text-[16px]">
               Банк
             </NuxtLink>
           </li>
           <li>
-            <NuxtLink class="btn btn-ghost font-medium text-[16px]">
+            <NuxtLink to="/stats" class="btn btn-ghost font-medium text-[16px]">
               Статистика
             </NuxtLink>
           </li>
         </ul>
       </div>
       <div class="navbar-end gap-2">
+        <template v-if="authStore.isAuthenticated">
+          <details class="dropdown">
+            <summary class="btn btn-ghost">
+              <PlayerHead nick="TeddyR1p" />
+            </summary>
 
-        <NuxtLink v-if="isAuth" to="/auth/logout" class="btn btn-ghost font-medium text-[16px]">
-          Выйти
-        </NuxtLink>
+            <ul
+              class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm mt-6"
+            >
+              <li><a>Профиль</a></li>
+              <li><a>Личный кабинет</a></li>
+              <li><a>Сообщения</a></li>
+              <li><a>Уведомления</a></li>
+              <div class="divider"></div>
+              <li><a>Настройки</a></li>
+              <li><a>Выход</a></li>
+            </ul>
+          </details>
 
-        <div v-else class="flex gap-2">
-          <NuxtLink to="/auth/login" class="btn btn-ghost font-medium text-[16px]">
+          <button @click="logout" class="btn btn-ghost font-medium text-[16px]">
+            Выйти
+          </button>
+        </template>
+        <template v-else>
+          <NuxtLink
+            to="/auth/login"
+            class="btn btn-ghost font-medium text-[16px]"
+          >
             Войти
           </NuxtLink>
-          <NuxtLink to="/auth/register" class="btn btn-ghost font-medium text-[16px]">
+          <NuxtLink
+            to="/auth/register"
+            class="btn btn-ghost font-medium text-[16px]"
+          >
             Регистрация
           </NuxtLink>
-        </div>
+        </template>
       </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
-import {ThemeSwitch} from '@shared/ui'
-const isAuth = ref(false);
+<script setup>
+import { computed, watch } from "vue";
+import { useAuthStore } from "~/stores/auth";
+import { PlayerHead } from "@shared/ui";
+
+const authStore = useAuthStore();
+const isAuthenticated = computed(() => authStore.isAuthenticated);
+
+const logout = () => {
+  authStore.clearToken();
+};
+
+watch(
+  () => authStore.token,
+  async (newToken) => {
+    if (newToken) {
+      await authStore.fetchUser();
+    } else {
+      authStore.user = null;
+    }
+  },
+  { immediate: true }
+);
 </script>

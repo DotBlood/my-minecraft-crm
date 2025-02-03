@@ -7,6 +7,11 @@
     <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
       <h2 class="text-2xl font-bold text-center mb-6">Регистрация</h2>
 
+      <!-- Alert -->
+      <div v-if="alert.message" :class="`alert alert-${alert.type} p-3 rounded-lg text-center mb-4`">
+        <span>{{ alert.message }}</span>
+      </div>
+
       <form @submit.prevent="handleSubmit" class="space-y-4">
         <input
           v-model="form.username"
@@ -44,8 +49,34 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
 import useAuth from "../model/useAuth";
 
 const { form, handleRegister } = useAuth();
-const handleSubmit = () => handleRegister();
+const alert = ref({ message: "", type: "" });
+
+const handleSubmit = async () => {
+  try {
+    const response = await handleRegister();
+    
+    console.log("Ответ сервера:", response);
+
+    if (response?.text) {
+      alert.value.message = response.text;
+      alert.value.type = response.type;
+    } else {
+      alert.value.message = "Неизвестная ошибка";
+      alert.value.type = "error";
+    }
+
+    setTimeout(() => {
+      alert.value.message = "";
+      alert.value.type = "";
+    }, 5000);
+  } catch (error) {
+    console.error("Ошибка при регистрации:", error);
+    alert.value.message = "Ошибка при регистрации. Попробуйте снова.";
+    alert.value.type = "error";
+  }
+};
 </script>

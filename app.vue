@@ -9,7 +9,9 @@
 import { ULoading } from "@shared/ui";
 const isLoad = ref(false);
 
-onMounted(() => (isLoad.value = true));
+onMounted(async () => {
+  isLoad.value = true;
+});
 </script>
 
 <style scoped>
